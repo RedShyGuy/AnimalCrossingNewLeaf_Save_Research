@@ -2277,19 +2277,21 @@ namespace CTRPluginFramework {
         u8 HeaderPadding[0x19]; //Always 0
     };
 
+    struct ACNL_SaveData { //Size: 0x89A80
+		ACNL_SaveHeader Header; //0x80
+		ACNL_Player Player[4]; //0xA0
+		ACNL_VillagerData VillagerData; //0x292A0
+		ACNL_BuildingData BuildingData; //0x4BE80
+		ACNL_MinigameData MinigameData; //WA exclusive
+		ACNL_UnknownData UnkData; //WA exclusive
+		ACNL_TownData TownData; //0x53424
+		ACNL_Player_SharedData PlayerSharedData; //0x71900
+	};
+
     struct Garden_Plus { //Size: 0x89B00
         SecureValueHeader SecureValue; //0x0
-        ACNL_SaveHeader Header; //0x80
-        ACNL_Player Player[4]; //0xA0
-        ACNL_VillagerData VillagerData; //0x292A0
-        ACNL_BuildingData BuildingData; //0x4BE80
-        ACNL_MinigameData MinigameData; //WA exclusive
-        ACNL_UnknownData UnkData; //WA exclusive
-        ACNL_TownData TownData; //0x53424
-        ACNL_Player_SharedData PlayerSharedData; //0x71900
+		ACNL_SaveData Data; //0x80
     };
 }
 
 #pragma pack(pop)
-
-
