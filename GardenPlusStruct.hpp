@@ -1,26 +1,35 @@
-#pragma once
+/*
+Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt
+This is further research of the research Slattz did
+*/
 
-#include <CTRPluginFramework.hpp>
-#include "Item/Item.hpp"
+#pragma once
 
 #pragma pack(push, 1)
 
 typedef char16_t wchar; ///< Wide character type
 
+typedef uint8_t u8;   ///<  8-bit unsigned integer
+typedef uint16_t u16; ///< 16-bit unsigned integer
+typedef uint32_t u32; ///< 32-bit unsigned integer
+typedef uint64_t u64; ///< 64-bit unsigned integer
+
+typedef int8_t s8;   ///<  8-bit signed integer
+typedef int16_t s16; ///< 16-bit signed integer
+typedef int32_t s32; ///< 32-bit signed integer
+typedef int64_t s64; ///< 64-bit signed integer
+
+typedef volatile u8 vu8;   ///<  8-bit volatile unsigned integer.
+typedef volatile u16 vu16; ///< 16-bit volatile unsigned integer.
+typedef volatile u32 vu32; ///< 32-bit volatile unsigned integer.
+typedef volatile u64 vu64; ///< 64-bit volatile unsigned integer.
+
+typedef volatile s8 vs8;   ///<  8-bit volatile signed integer.
+typedef volatile s16 vs16; ///< 16-bit volatile signed integer.
+typedef volatile s32 vs32; ///< 32-bit volatile signed integer.
+typedef volatile s64 vs64; ///< 64-bit volatile signed integer.
+
 namespace CTRPluginFramework {
-
-    enum class PlayerStatus : u8 {
-        Town_00 = 0,
-        Town_01 = 1,
-        Town_02 = 2,
-        Town_03 = 3,
-        Isl_00 = 4,
-        Isl_01 = 5,
-        Isl_02 = 6,
-        Isl_03 = 7,
-        Empty = 8
-    };
-
     enum Item_Category : u32 {
         MiiHead = 0, //(0x2000)
         NPCBuildingItems, //(0x2061 -> 0x2074)
@@ -180,7 +189,10 @@ namespace CTRPluginFramework {
         Invalid //Game internally actually has this for many checks
     };
 
-    /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
+    struct Item {
+        u16 ID;
+        u16 Flags;
+    }
 
     struct Emoticons {
         u8 emoticons[40];
@@ -200,22 +212,6 @@ namespace CTRPluginFramework {
         wchar DataTownName[9]; //Default is 0
         u8 Unknown01; //Default is 0xA
         u8 Unknown02;
-
-        bool operator==(const TownID& townID) const {
-            return TID == townID.TID && 
-                    std::equal(std::begin(DataTownName), std::end(DataTownName), std::begin(townID.DataTownName)) && 
-                    Unknown01 == townID.Unknown01 && 
-                    Unknown02 == townID.Unknown02;
-        }
-
-        std::string GetName() const {
-            std::string out;
-            Utils::ConvertUTF16ToUTF8(
-                out,
-                DataTownName
-            );
-            return out;
-        }
     };
 
     struct PlayerID { //0x16
@@ -223,22 +219,6 @@ namespace CTRPluginFramework {
         wchar PlayerName[9];
         u8 Gender;
         u8 ZeroPad;
-
-        bool operator==(const PlayerID& playerID) const {
-            return PID == playerID.PID && 
-                    std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(playerID.PlayerName)) && 
-                    Gender == playerID.Gender && 
-                    ZeroPad == playerID.ZeroPad;
-        }
-
-        std::string GetName() const {
-            std::string out;
-            Utils::ConvertUTF16ToUTF8(
-                out,
-                PlayerName
-            );
-            return out;
-        }
     };
 
     struct PersonalID { //Size: 0x2E
@@ -246,13 +226,6 @@ namespace CTRPluginFramework {
         TownID TownData;
         u8 TPC_Country;
         u8 TPC_County;
-
-        bool operator==(const PersonalID& personalID) const {
-            return PlayerData == personalID.PlayerData && 
-                    TownData == personalID.TownData && 
-                    TPC_Country == personalID.TPC_Country && 
-                    TPC_County == personalID.TPC_County;
-        }
     };
 
     struct ACNL_Pattern { //Size: 0x870
@@ -264,7 +237,6 @@ namespace CTRPluginFramework {
         u8 PatternType;
         u16 ZeroPad_2; //Zero Padding; Always 0x0000
         u8 PatternData1[512]; //mandatory
-
     //only used when PatternType < 0x09
         u8 PatternData2[512]; //optional
         u8 PatternData3[512]; //optional
@@ -2339,3 +2311,4 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
+
