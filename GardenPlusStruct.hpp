@@ -960,15 +960,10 @@ namespace CTRPluginFramework {
         //there are 102 initiatives in total
     };
 
-    struct ACNL_Initiative { //Initiatives
+    struct ACNL_Initiative { //Size: 0x23C
         u64 Unknown5; //0x8B80 //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
         u8 WeeklyInitiatives[2]; //0x8B88 //Set to 0 in player ctor
         Daily_Initiative DailyInitiatives[2]; //0x8B8A //Set to 0 in player ctor
-        u16 Unknown10; //0x8B8E //???; Set to 0 in player ctor
-        u8 Unknown11; //0x8B90 //???; Set to 0 in player ctor
-        u32 Unknown12; //0x8B91 //???; Set to 0 in player ctor
-        u16 Unknown13; //0x8B95 //???; Set to 0 in player ctor
-        u8 Unknown14; //0x8B97 //???; Set to 0 in player ctor
         u8 Unknown15; //0x8B98 //???; Set to 0x65 in player ctor
         u8 Unknown16; //0x8B99 //???; Set to 0 in player ctor
         u8 Unknown17; //0x8B9A //???; Set to 0 in player ctor
@@ -1093,14 +1088,15 @@ namespace CTRPluginFramework {
         u8 LyleWhatsNew : 5;
     };
 
-    struct MiiData {
+    struct MiiData { //sizeof = 0xA9
         u8 MiiFace[92]; //0x5538 -> 0x5595 //Based on https://3dbrew.org/wiki/Mii#Mii_format
         u16 ZeroPad_1 = 0;  //0x5594 //U16 Zero Padding; Always 0x0000
         u16 Mii_CRC16;
         u32 AES_CCM_MAC[4];
         u8 Unknown2[24]; //0x5596 -> 0x55BF: Gets written to when getting a Mii form Harriet. Never read(?)
-        u8 ZeroPad_3[30]; //0x55C0 -> 0x55DF
+        u8 ZeroPad_3[30]; //0x55C0 -> 0x55DE
         u16 ZeroPad_2;
+        u8 HasMii; //0x55E0 //Values: 0 = No Mii, 1 = Has Mii, <1 = Has Mii, face doesn't show
     };
 
     struct Encyclopedia_Sizes {
@@ -1142,7 +1138,6 @@ namespace CTRPluginFramework {
         u8 PatternOrder[10]; //0x552C -> 0x5535 //Order of patterns from 0x0 - 0x9
         u16 Padding_1; //0x5536 //U16 Zero Padding; Always 0x0000
         MiiData PlayerMii;
-        u8 HasMii; //0x55E0 //Values: 0 = No Mii, 1 = Has Mii, <1 = Has Mii, face doesn't show
         u8 Padding_2; //0x55E1 //Not Verified: U8 Zero Padding; Always 0x00
         u16 Padding_3; //0x55E2 -> 0x55E3 //Not Verified: U16 Zero Padding; Always 0x0000
         Mannequin Mannequin1;
@@ -2130,7 +2125,8 @@ namespace CTRPluginFramework {
     KOKT63???
     KOKT66???
     */
-    struct ACNL_Census_Player_Stats { //Size: 0x62C probably(?)
+    struct ACNL_Census_Player_Stats { //Size: 0x1448
+		u32 Checksum;
         ACNL_Cenus_Data_Type BellsEarned; //0x72510
         ACNL_Cenus_Data_Type ABDBalance; //0x72524
         ACNL_Cenus_Data_Type BellsSpent; //0x72538
@@ -2214,56 +2210,41 @@ namespace CTRPluginFramework {
         
         /*0x1180*/ //0x73690 //that one seems to be set in the game, meaning there are more???
         /*0x118C*/ //0x7369C
+		u8 UnknownData[3588];
     };
 
-    struct UnknownSharedData {
+    struct UnknownStorageBox { //Size: 0x6
         u16 Unk0; // 0x00
         u16 Unk1; // 0x02
         u16 Unk2; // 0x04
     };
-
-    /*
-    int sub_2B8890()
-    Maybe MEOW Coupons? One method checks them (u64 MeowCoupons Count)
-    */
-    struct UnknownSharedData2 { //Size: 
-        u8 Unknown[0xC90]; //0x88D50
-        UnknownSharedData SharedData[4];
-    };
+	
+	struct ACNL_Player_SharedData_Unknown0 { //Size: 0x24
+		u32 Checksum;
+		u8 UnknownData[32];
+	};
+	
+	struct ACNL_Player_SharedData_Unknown1 { //Size: 0xBE8
+		u32 Checksum;
+		u8 UnknownData[3044];
+	};
+	
+	struct ACNL_Player_StorageBox { //Size: 0x1618C
+		u32 Checksum;
+		Player_Letters PlayerMailBoxLetters[4];
+		Player_Secret_Storage PlayerSecretStorages[4];
+		ACNL_Letter LetterPool[80];
+		u8 Unknown[0xC90]; //0x88D50 int sub_2B8890() Maybe MEOW Coupons? One method checks them (u64 MeowCoupons Count)
+        UnknownStorageBox SharedData[4];
+		u8 Unknown13[2112];
+	};
 
     struct ACNL_Player_SharedData { //Size: 0x181FF //Starts at 0x71900
-        u32 Checksum; //0x71900
-        u8 Unknown0[8]; //0x71904 //structure unsure
-        u16 Unknown1; //0x7190C //ctor sets to 0
-        u32 Unknown2; //0x7190E //ctor sets to 0
-        u32 Unknown3; //0x71912 //ctor sets to 0
-        u32 Unknown4; //0x71916 //ctor sets to 0
-        u32 Unknown5; //0x7191A //ctor sets to 0
-        u16 Unknown6; //0x7191C //ctor sets to 0
-        u8 Unknown7; //0x7191E //ctor sets to 0
-        u8 Unknown8; //0x7191F //ctor sets to 0
-        u8 Unknown9[2]; //0x71920 //structure unsure
-        u16 Unknown10; //0x71922
-    
-        u8 Unknown11[0xBEE]; //0x71924 //structure unsure
-
-        ACNL_Census_Player_Stats PlayerStats; //0x72510 (Start + 0xC10)
-
-        u8 Unknown12[0xE08]; //0x72B3C //structure unsure
-
-        Player_Letters PlayerMailBoxLetters[4]; //0x73958 (Start + 0x2058)
-        Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778 (Start + 0x8e78)
-        ACNL_Letter LetterPool[80]; //0x7BDF8 (Start + 0xa4f8) //any letter that isn't in your mailbox yet (every player shares this pool)
-        //Next: 0x885F8
-
-        //u32 Unknown; //0x16CF8
-        //u32 Unknown; //0x16CFC
-        //0x88608 (Start + 0x16d08) ???
-        //0x887A8 (Start + 0x16ea8) ??? (size: 0x68?)
-
-        UnknownSharedData2 UnknownData2; //0x88D50 (Start + 0x17450) ???
-
-        u8 Unknown13[0x1507];
+        ACNL_Player_SharedData_Unknown0 Unknown0;
+		ACNL_Player_SharedData_Unknown1 Unknown1;
+		ACNL_Census_Player_Stats PlayerStats;
+		ACNL_Player_StorageBox StorageBox;
+		u8 Unknown14[32];
     };
 
     /*
@@ -2306,9 +2287,9 @@ namespace CTRPluginFramework {
         ACNL_UnknownData UnkData; //WA exclusive
         ACNL_TownData TownData; //0x53424
         ACNL_Player_SharedData PlayerSharedData; //0x71900
-        u8 padding; //0x89AFF
     };
 }
 
 #pragma pack(pop)
+
 
