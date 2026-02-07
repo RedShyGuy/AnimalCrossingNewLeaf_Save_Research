@@ -1868,7 +1868,7 @@ namespace CTRPluginFramework {
 
     struct ACNL_TownData {
         u32 Checksum; //0x53424; Checksum of the 0x1E4D8 of this data
-        u8 Unknown1[88];
+        u8 Unknown0[88];
         u8 OceanSide; //[0-1]; 0: Left, 1: Right; Museum and Camping Ground and the starting position of the train driving by are all on the opposite side to this.; Ctor sets to 3
         u8 TownGrassType; //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
         u8 CliffType; //[0-2]; This is unused/scrapped. All 3 cliff texture in the ROM are the exact same.; Ctor sets to 2
@@ -1877,7 +1877,9 @@ namespace CTRPluginFramework {
         Item TownItems[(16*16)*(5*4)]; //16*16 items per acre; Items only cover map acres (5*4); 0x1400 of items
         u8 MapGrassToday[(16*16)*(5*4)]; //0x584d8 //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
         u8 Unused2[40]; //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
-        u8 MapGrass[(16*16)*(8*6)]; //0x59900
+        u8 MapGrass[2860]; //0x59900
+		ACNL_Letter UnknownLetter[10];
+		u8 Unknown1[3028];
         u8 Unused3[0x1000]; //Town data actually includes it with MapGrass (0x8000 in total), despite this portion not being used
         ACNL_PlayerHouse PlayerHouse[4]; //0x5D900
         s64 CurrentTime; //0x621A0
@@ -2295,3 +2297,4 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
+
