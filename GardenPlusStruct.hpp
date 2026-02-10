@@ -1011,7 +1011,7 @@ namespace CTRPluginFramework {
         u8 Unknown4; //0x8DF6 //???; Set to 0x9 in player ctor
         u8 Padding1; //0x8DF7 //Padding: Not set in ctor
         u32 Unknown6; //0x8DF8 //???; Set to 0x00007ffe in player ctor
-        u32 Unknown7; //0x8DFC //???; Set to 0x00007ffe in player ctor
+        Item Unknown7; //0x8DFC //???; Set to 0x00007ffe in player ctor
         u8 Unknown8; //0x8E00 //???; Set to 0xFF in player ctor
         u8 Unknown9; //0x8E01 //???; Set to 0x7 in player ctor
         u8 Unknown10; //0x8E02 //???; Set to 0xFF in player ctor
@@ -1224,7 +1224,7 @@ namespace CTRPluginFramework {
         u8 UnknownNotSetYet2[0xC];
         UnknownStruct9 UnkBuffer9;
         Item UnkItem1;
-        Item UnkItem2;
+        Item ReddPurchasedItem;
         u8 UnknownNotSetYet3[0xE];
         u8 UnknownNotSetYet4[0xA];
         u16 Unk_u16_1; //Set to 0x7DB in player ctor
@@ -2295,5 +2295,6 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
+
 
 
