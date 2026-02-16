@@ -383,7 +383,7 @@ namespace CTRPluginFramework {
         u8 BlathersIntroduced : 1; //somehow also set tom nook introduced to 1???
         u8 Unknown30 : 1;
         u8 CelesteIntroduced : 1;
-        u8 Unknown32 : 1;
+        u8 CyrusIntroduced : 1;
         u8 Unknown33 : 1;
         u8 Unknown34 : 1; //Reese and Tommy conversation (ReTail)
         u8 Unknown35 : 1;
@@ -2295,6 +2295,7 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
+
 
 
 
